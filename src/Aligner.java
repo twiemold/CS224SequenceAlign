@@ -44,7 +44,7 @@ public class Aligner {
     private float opt(int i, int j) {
         if (alignmentArray[i][j] == 0 && i != 0 && j != 0) {
             // apply lambda function
-            float alpha = comparator.apply(s1.charAt(i), s2.charAt(j));
+            float alpha = comparator.apply(s1.charAt(i-1), s2.charAt(j-1));
             alignmentArray[i][j] = Math.min(Math.min(alpha + opt(i - 1, j - 1), delta + opt(i - 1,j)), delta + opt(i, j - 1));
         }
         return alignmentArray[i][j];
