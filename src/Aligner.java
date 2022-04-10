@@ -23,23 +23,23 @@ public class Aligner {
         // n is length of s2
         int i, j;
         // Initialize A[i][0] = i*delta for each i
-        for (i = 0; i < s1.length(); ++i) {
+        for (i = 0; i < s1.length()+1; ++i) {
             alignmentArray[i][0] = (i * delta);
         }
         // Initialize A[0][j] = j*delta for each j
-        for (j = 0; j < s2.length(); ++j) {
+        for (j = 0; j < s2.length()+1; ++j) {
             alignmentArray[0][j] = (j * delta);
         }
         // for each j = 1 to n
-        for (j = 1; j < s2.length(); ++j) {
+        for (j = 1; j < s2.length()+1; ++j) {
             // for each i = 1 to m
-            for (i = 1; i < s1.length(); ++i) {
+            for (i = 1; i < s1.length()+1; ++i) {
                 // opt(i, j);
                 opt(i, j);
             }
         }
-        System.out.println(alignmentArray[s1.length()-1][s2.length()-1]);
-        return alignmentArray[s1.length()-1][s1.length()-1];
+        System.out.println(alignmentArray[s1.length()][s2.length()]);
+        return alignmentArray[s1.length()][s1.length()];
     };
     private float opt(int i, int j) {
         if (alignmentArray[i][j] == 0 && i != 0 && j != 0) {

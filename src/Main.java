@@ -7,7 +7,6 @@ public class Main {
     testTwo();
   }
 
-/*--------
   public static void testOne() {
     String s1 = "mean";
     String s2 = "name";
@@ -19,6 +18,31 @@ public class Main {
     // if c1 and c2 are both consonants, then 1.0 (if both are not vowels)
     // otherwise, 3.0
 
+    BiFunction <Character, Character, Float> alpha = (c1, c2) -> {
+      float alphaVal = 0.0f;
+      if (c1 == c2) {
+        return alphaVal;
+      }
+      char[] vowels = {'a', 'e', 'i', 'o', 'u'};
+      boolean c1Vowel = false;
+      boolean c2Vowel = false;
+      for (char vowel : vowels) {
+        if (c1 == vowel) {
+          c1Vowel = true;
+        }
+        if (c2 == vowel) {
+          c2Vowel = true;
+        }
+      }
+      if ((c1Vowel && c2Vowel) || (!(c1Vowel) && !(c2Vowel))) {
+        alphaVal = 1.0f;
+      } else {
+        alphaVal = 3.0f;
+      }
+      return alphaVal;
+    };
+
+
     Aligner aligner = new Aligner(alpha, delta);
     aligner.align(s1, s2);
     // this should produce the following alignment:
@@ -26,7 +50,6 @@ public class Main {
     // mean-
     // with cost = 6.0
   }
---------*/
 
   public static void testTwo() {
     String s1 = "nowisthedimeforallgoodmen";
