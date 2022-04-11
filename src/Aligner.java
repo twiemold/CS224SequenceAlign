@@ -14,7 +14,7 @@ public class Aligner {
     public Aligner(BiFunction<Character, Character, Float> comparator, float delta) {
         this.comparator = comparator;
         this.delta = delta;
-    };
+    }
 
     public float align(String s1, String s2) {
         this.s1 = s1;
@@ -39,8 +39,9 @@ public class Aligner {
             }
         }
         System.out.println(alignmentArray[s1.length()][s2.length()]);
+        System.out.println(traceback(s1.length(), s2.length()));
         return alignmentArray[s1.length()][s1.length()];
-    };
+    }
     private float opt(int i, int j) {
         if (alignmentArray[i][j] == 0 && i != 0 && j != 0) {
             // apply lambda function
@@ -48,9 +49,44 @@ public class Aligner {
             alignmentArray[i][j] = Math.min(Math.min(alpha + opt(i - 1, j - 1), delta + opt(i - 1,j)), delta + opt(i, j - 1));
         }
         return alignmentArray[i][j];
-    };
+    }
+
     private String traceback(int i, int j) {
-        return String.format("%s align withs %s", s1.charAt(i), s2.charAt(j));
-    };
+        String alignmentString = "";
+        while (i > 0 && j > 0) {
+            String lineString = "";
+            float current = alignmentArray[i][j];
+            float diagonal = alignmentArray[i-1][j-1];
+            float horizontal = alignmentArray[i-1][j];
+            float vertical = alignmentArray[i][j-1];
+            float smallestVal = Math.min(diagonal,
+                    Math.min(horizontal, vertical));
+            if (current == diagonal) {
+                i--;
+                j--;
+                lineString = String.format("%s aligns with %s\n", s1.charAt(i), s2.charAt(j));
+            } else if (current == horizontal) {
+                i--;
+                lineString = String.format("%s aligns with -\n", s1.charAt(i));
+            } else if (current == vertical) {
+                j--;
+                lineString = String.format("- aligns with %s\n", s2.charAt(j));
+            } else {
+                if (smallestVal == diagonal) {
+                    i--;
+                    j--;
+                    lineString = String.format("%s aligns with %s\n", s1.charAt(i), s2.charAt(j));
+                } else if (smallestVal == horizontal) {
+                    i--;
+                    lineString = String.format("%s aligns with -\n", s1.charAt(i));
+                } else {
+                    j--;
+                    lineString = String.format("- aligns with %s\n", s2.charAt(j));
+                }
+            }
+            alignmentString += lineString;
+        }
+        return alignmentString;
+    }
 
 }
