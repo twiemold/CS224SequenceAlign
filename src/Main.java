@@ -1,13 +1,22 @@
-// jdh CS224 Spring 2022
+/**
+ * Thomas Wiemold
+ * 4/12/2022
+ * CS224
+ * Programming Assignment #5
+ * Sequence Alignment using Dynamic Programming
+ * Main.java from Jason Hibbeler
+ */
 
 import java.util.function.BiFunction;
 
 public class Main {
-  public static void main(String argv[]) {
+  public static void main(String[] argv) {
+    testOne();
     testTwo();
   }
 
   public static void testOne() {
+    System.out.println("\nBegin Test One:");
     String s1 = "mean";
     String s2 = "name";
     float delta = 2.0f;
@@ -44,7 +53,8 @@ public class Main {
 
 
     Aligner aligner = new Aligner(alpha, delta);
-    aligner.align(s1, s2);
+    float alignmentScore = aligner.align(s1, s2);
+    System.out.printf("Final alignment score: %s\n", alignmentScore);
     // this should produce the following alignment:
     // n-ame
     // mean-
@@ -52,6 +62,7 @@ public class Main {
   }
 
   public static void testTwo() {
+    System.out.println("\nBegin Test Two:");
     String s1 = "nowisthedimeforallgoodmen";
     String s2 = "mowisthetimeallforgoodmen";
     float delta = 2.0f;
@@ -59,7 +70,8 @@ public class Main {
     BiFunction <Character, Character, Float> alpha = (c1, c2)  -> c1 == c2 ? 0.0f : 3.0f;
 
     Aligner aligner = new Aligner(alpha, delta);
-    aligner.align(s1, s2);
+    float alignmentScore = aligner.align(s1, s2);
+    System.out.printf("Final alignment score: %s\n", alignmentScore);
     // this should give you the following alignment:
     // mowisthetime---allforgoodmen
     // nowisthedimeforall---goodmen
