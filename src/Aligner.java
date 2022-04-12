@@ -57,32 +57,20 @@ public class Aligner {
             String lineString = "";
             float current = alignmentArray[i][j];
             float diagonal = alignmentArray[i-1][j-1];
-            float horizontal = alignmentArray[i-1][j];
             float vertical = alignmentArray[i][j-1];
-            float smallestVal = Math.min(diagonal,
-                    Math.min(horizontal, vertical));
-            if (current == diagonal) {
+            char iChar = s1.charAt(i-1);
+            char jChar = s2.charAt(j-1);
+            float currentAlpha = comparator.apply(iChar, jChar);
+            if (current-currentAlpha == diagonal) {
                 i--;
                 j--;
                 lineString = String.format("%s aligns with %s\n", s1.charAt(i), s2.charAt(j));
-            } else if (current == horizontal) {
-                i--;
-                lineString = String.format("%s aligns with -\n", s1.charAt(i));
-            } else if (current == vertical) {
+            } else if (current-delta == vertical) {
                 j--;
                 lineString = String.format("- aligns with %s\n", s2.charAt(j));
             } else {
-                if (smallestVal == diagonal) {
-                    i--;
-                    j--;
-                    lineString = String.format("%s aligns with %s\n", s1.charAt(i), s2.charAt(j));
-                } else if (smallestVal == horizontal) {
-                    i--;
-                    lineString = String.format("%s aligns with -\n", s1.charAt(i));
-                } else {
-                    j--;
-                    lineString = String.format("- aligns with %s\n", s2.charAt(j));
-                }
+                i--;
+                lineString = String.format("%s aligns with -\n", s1.charAt(i));
             }
             alignmentString += lineString;
         }
