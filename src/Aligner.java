@@ -49,6 +49,8 @@ public class Aligner {
 
     private String traceback(int i, int j) {
         StringBuilder alignmentString = new StringBuilder();
+        StringBuilder iString = new StringBuilder();
+        StringBuilder jString = new StringBuilder();
         while (i > 0 && j > 0) {
             String lineString;
             float current = alignmentArray[i][j];
@@ -58,16 +60,23 @@ public class Aligner {
             if (current-currentAlpha == diagonal) {
                 i--;
                 j--;
-                lineString = String.format("%s aligns with %s\n", s1.charAt(i), s2.charAt(j));
+                iString.append(s1.charAt(i));
+                jString.append(s2.charAt(j));
             } else if (current-delta == vertical) {
                 j--;
-                lineString = String.format("- aligns with %s\n", s2.charAt(j));
+                iString.append("-");
+                jString.append(s2.charAt(j));
             } else {
                 i--;
-                lineString = String.format("%s aligns with -\n", s1.charAt(i));
+                iString.append(s1.charAt(i));
+                jString.append("-");
             }
-            alignmentString.append(lineString);
         }
+        iString.reverse();
+        jString.reverse();
+        alignmentString.append(jString);
+        alignmentString.append("\n");
+        alignmentString.append(iString);
         return alignmentString.toString();
     }
 }
