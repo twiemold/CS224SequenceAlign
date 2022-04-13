@@ -9,13 +9,10 @@
 import java.util.function.BiFunction;
 
 public class Aligner {
-    final int arraySize = 50;
-
-    String s1;
-    String s2;
+    String s1, s2;
     float delta;
     BiFunction <Character, Character, Float> comparator;
-    float[][] alignmentArray = new float[arraySize][arraySize];
+    float[][] alignmentArray;
 
     public Aligner(BiFunction<Character, Character, Float> comparator, float delta) {
         this.comparator = comparator;
@@ -25,6 +22,7 @@ public class Aligner {
     public float align(String s1, String s2) {
         this.s1 = s1;
         this.s2 = s2;
+        alignmentArray = new float[s1.length()+1][s2.length()+1];
         int i, j;
         for (i = 0; i < s1.length()+1; ++i) {
             alignmentArray[i][0] = (i * delta);
@@ -40,6 +38,7 @@ public class Aligner {
         System.out.println(traceback(s1.length(), s2.length()));
         return alignmentArray[s1.length()][s1.length()];
     }
+
     private float opt(int i, int j) {
         if (alignmentArray[i][j] == 0 && i != 0 && j != 0) {
             float alpha = comparator.apply(s1.charAt(i-1), s2.charAt(j-1));
@@ -55,9 +54,7 @@ public class Aligner {
             float current = alignmentArray[i][j];
             float diagonal = alignmentArray[i-1][j-1];
             float vertical = alignmentArray[i][j-1];
-            char iChar = s1.charAt(i-1);
-            char jChar = s2.charAt(j-1);
-            float currentAlpha = comparator.apply(iChar, jChar);
+            float currentAlpha = comparator.apply(s1.charAt(i-1), s2.charAt(j-1));
             if (current-currentAlpha == diagonal) {
                 i--;
                 j--;
