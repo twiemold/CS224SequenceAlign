@@ -56,16 +56,16 @@ public class Aligner {
             float diagonal = alignmentArray[i-1][j-1];
             float vertical = alignmentArray[i][j-1];
             float currentAlpha = comparator.apply(s1.charAt(i-1), s2.charAt(j-1));
-            if (current-currentAlpha == diagonal) {
+            if (current-delta == vertical) {
+                j--;
+                iString.append("-");
+                jString.append(s2.charAt(j));
+            } else if (current-currentAlpha == diagonal) {
                 i--;
                 j--;
                 iString.append(s1.charAt(i));
                 jString.append(s2.charAt(j));
-            } else if (current-delta == vertical) {
-                j--;
-                iString.append("-");
-                jString.append(s2.charAt(j));
-            } else {
+            }  else {
                 i--;
                 iString.append(s1.charAt(i));
                 jString.append("-");

@@ -67,7 +67,30 @@ public class Main {
     String s2 = "mowisthetimeallforgoodmen";
     float delta = 2.0f;
 
-    BiFunction <Character, Character, Float> alpha = (c1, c2)  -> c1 == c2 ? 0.0f : 3.0f;
+    // BiFunction <Character, Character, Float> alpha = (c1, c2)  -> c1 == c2 ? 0.0f : 3.0f;
+    BiFunction <Character, Character, Float> alpha = (c1, c2) -> {
+      float alphaVal = 0.0f;
+      if (c1 == c2) {
+        return alphaVal;
+      }
+      char[] vowels = {'a', 'e', 'i', 'o', 'u'};
+      boolean c1Vowel = false;
+      boolean c2Vowel = false;
+      for (char vowel : vowels) {
+        if (c1 == vowel) {
+          c1Vowel = true;
+        }
+        if (c2 == vowel) {
+          c2Vowel = true;
+        }
+      }
+      if ((c1Vowel && c2Vowel) || (!(c1Vowel) && !(c2Vowel))) {
+        alphaVal = 1.0f;
+      } else {
+        alphaVal = 3.0f;
+      }
+      return alphaVal;
+    };
 
     Aligner aligner = new Aligner(alpha, delta);
     float alignmentScore = aligner.align(s1, s2);
