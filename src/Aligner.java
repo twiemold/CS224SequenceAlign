@@ -13,6 +13,7 @@ public class Aligner {
     float delta;
     BiFunction <Character, Character, Float> comparator;
     float[][] alignmentArray;
+    byte[][] choices;
 
     public Aligner(BiFunction<Character, Character, Float> comparator, float delta) {
         this.comparator = comparator;
@@ -23,6 +24,7 @@ public class Aligner {
         this.s1 = s1;
         this.s2 = s2;
         alignmentArray = new float[s1.length()+1][s2.length()+1];
+        choices = new byte[s1.length()+1][s2.length()+1];
         int i, j;
         for (i = 0; i < s1.length()+1; ++i) {
             alignmentArray[i][0] = (i * delta);
@@ -42,7 +44,18 @@ public class Aligner {
     private float opt(int i, int j) {
         if (alignmentArray[i][j] == 0 && i != 0 && j != 0) {
             float alpha = comparator.apply(s1.charAt(i-1), s2.charAt(j-1));
-            alignmentArray[i][j] = Math.min(Math.min(alpha + opt(i - 1, j - 1), delta + opt(i - 1,j)), delta + opt(i, j - 1));
+            float first = delta + opt(i - 1,j);
+            float second = alpha + opt(i - 1, j - 1);
+            float third = delta + opt(i, j - 1);
+            float minVal = Math.min(Math.min(second, first), third);
+            if (minVal == third) {
+                choices[i][j] = 3;
+            } else if (minVal == second) {
+                choices[i][j] = 2;
+            } else {
+                choices[i][j] = 1;
+            }
+            alignmentArray[i][j] = minVal;
         }
         return alignmentArray[i][j];
     }
@@ -52,15 +65,12 @@ public class Aligner {
         StringBuilder iString = new StringBuilder();
         StringBuilder jString = new StringBuilder();
         while (i > 0 && j > 0) {
-            float current = alignmentArray[i][j];
-            float diagonal = alignmentArray[i-1][j-1];
-            float vertical = alignmentArray[i][j-1];
-            float currentAlpha = comparator.apply(s1.charAt(i-1), s2.charAt(j-1));
-            if (current-delta == vertical) {
+            byte choice = choices[i][j];
+            if (choice == 3) {
                 j--;
                 iString.append("-");
                 jString.append(s2.charAt(j));
-            } else if (current-currentAlpha == diagonal) {
+            } else if (choice == 2) {
                 i--;
                 j--;
                 iString.append(s1.charAt(i));
